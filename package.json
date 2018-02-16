@@ -1,0 +1,31 @@
+{
+  "name": "cordova-plugin-fileselector",
+  "version": "1.0.0",
+  "description": "Cordova Plugin that supplies a File Selector.",
+  "cordova": {
+    "id": "cordova-plugin-fileselector",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cinthiaro/cordova-plugin-fileselector.git"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=2.8.0"
+    }
+  ],
+  "author": "Don Coleman",
+  "license": "Apache License, Version 2.0",
+  "bugs": {
+    "url": "https://github.com/cinthiaro/cordova-plugin-fileselector/issues"
+  },
+  "homepage": "https://github.com/cinthiaro/cordova-plugin-fileselector#readme"
+}
