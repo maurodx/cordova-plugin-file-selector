@@ -1,25 +1,39 @@
-Cordova FileChooser Plugin
+# Cordova FileSelector Plugin
 
-Requires Cordova >= 2.8.0
+Source forked from https://github.com/don/cordova-filechooser
 
-Install with Cordova CLI
-	
-	$ cordova plugin add http://github.com/don/cordova-filechooser.git
+- Requires Cordova >= 2.8.0
+- Support for Cordova >= 7.0.0
 
-Install with Plugman 
+## Installing the plugin
 
-	$ plugman --platform android --project /path/to/project \ 
-		--plugin http://github.com/don/cordova-filechooser.git
+### With Cordova CLI
 
-API
+        $ cordova plugin add http://github.com/cinthiaro/cordova-plugin-fileselector.git
 
-	fileChooser.open(successCallback, failureCallback);
+### With Plugman
 
-The success callback get the uri of the selected file
+        $ plugman --platform android --project /path/to/project \
+                --plugin http://github.com/cinthiaro/cordova-filechooser.git
 
-	fileChooser.open(function(uri) {
-		alert(uri);
-	});
+## Using the plugin
+
+        fileChooser.open(successCallback, failureCallback);
+
+The success callback returns the object file with the following properties: name, uri, mime_type and extension.
+
+```
+        fileChooser.open(function(file) {
+                alert("Name: " + file.name +
+                      " URI: " + file.uri +
+                      " Mime type: " + file.mime_type +
+                      " Extension: " + file.extension);
+        });
+
+```
+
+Supported Platforms:
+- Android
 	
 Screenshot
 
