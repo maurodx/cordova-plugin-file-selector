@@ -1,4 +1,4 @@
-# Cordova FileSelector Plugin
+# Cordova File Selector Plugin
 
 Source forked from https://github.com/don/cordova-filechooser
 
@@ -9,7 +9,7 @@ Source forked from https://github.com/don/cordova-filechooser
 
 ### With Cordova CLI
 
-        $ cordova plugin add http://github.com/cinthiaro/cordova-plugin-file-selector.git
+        $ cordova plugin add https://github.com/cinthiaro/cordova-plugin-file-selector.git
 
 ### With Plugman
 
