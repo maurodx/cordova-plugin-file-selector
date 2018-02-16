@@ -9,12 +9,12 @@ Source forked from https://github.com/don/cordova-filechooser
 
 ### With Cordova CLI
 
-        $ cordova plugin add http://github.com/cinthiaro/cordova-plugin-fileselector.git
+        $ cordova plugin add http://github.com/cinthiaro/cordova-plugin-file-selector.git
 
 ### With Plugman
 
         $ plugman --platform android --project /path/to/project \
-                --plugin http://github.com/cinthiaro/cordova-filechooser.git
+                --plugin http://github.com/cinthiaro/cordova-plugin-file-selector.git
 
 ## Using the plugin
 
