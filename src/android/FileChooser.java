@@ -1,15 +1,27 @@
 package com.megster.cordova;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
+import android.provider.OpenableColumns;
+import android.webkit.MimeTypeMap;
 
 import org.apache.cordova.CordovaArgs;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
-import org.json.JSONException;
 
 public class FileChooser extends CordovaPlugin {
 
@@ -58,8 +70,72 @@ public class FileChooser extends CordovaPlugin {
 
                 if (uri != null) {
 
-                    Log.w(TAG, uri.toString());
-                    callback.success(uri.toString());
+		    String displayName = null;
+		    String uriString = uri.toString();
+		    String mimeType = null;
+		    String extension = null;
+
+		    if (uriString.startsWith("content://")) {
+			Cursor cursor = null;
+			try {
+			    cursor = cordova.getActivity().getContentResolver().query(uri, null, null, null, null);
+			    if (cursor != null && cursor.moveToFirst()) {
+				displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+			    }
+			    mimeType = cordova.getActivity().getContentResolver().getType(uri);
+			} finally {
+			    cursor.close();
+			}
+		    } else if (uriString.startsWith("file://")) {
+			displayName = new File(uriString).getName();
+			String parts[]=uriString.split("\\.");
+			String ext=parts[parts.length-1];
+			if (ext != null) {
+			    MimeTypeMap mime = MimeTypeMap.getSingleton();
+			    mimeType = mime.getMimeTypeFromExtension(ext);
+			}
+		    }
+
+		    if (mimeType != null) {
+			MimeTypeMap mime = MimeTypeMap.getSingleton();
+			extension = mime.getExtensionFromMimeType(mimeType);
+		    }
+
+		    if (uriString.startsWith("content://com.android.gallery3d.provider"))  {
+			//Use the com.google provider, not the com.android provider.
+			uriString = uriString.replace("com.android.gallery3d","com.google.android.gallery3d");
+		    }
+
+		    if (uriString.startsWith("content://com.google.android.gallery3d") || uriString.startsWith("content://com.sec.android.gallery3d")) {
+			ContextWrapper cw = new ContextWrapper(cordova.getActivity());
+			File mypath=new File(cw.getCacheDir(),displayName);
+			FileOutputStream fos = null;
+			InputStream input = null;
+			try {
+			    fos = new FileOutputStream(mypath);
+			    input = cordova.getActivity().getContentResolver().openInputStream(uri);
+			    Bitmap bitmap = BitmapFactory.decodeStream(input);
+			    if(bitmap != null){
+				if(bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)){
+				    uriString = mypath.toURI().toString();
+				}
+			    }
+			    fos.close();
+			} catch (Exception e) {
+			    e.printStackTrace();
+			}
+		    }
+
+		    try{
+			JSONObject fileData = new JSONObject();
+			fileData.put("uri",uriString);
+			fileData.put("name",displayName);
+			fileData.put("mime_type",mimeType);
+			fileData.put("extension",extension);
+			callback.success(fileData);
+		    } catch(JSONException e) {
+			callback.error("JSON Object not supported");
+		    }
 
                 } else {
 
